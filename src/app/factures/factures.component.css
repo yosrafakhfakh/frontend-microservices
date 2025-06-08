@@ -1,0 +1,18 @@
+.card-title {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.table th {
+  background-color: var(--light);
+  color: var(--gray-dark);
+}
+
+.btn-sm {
+  padding: 0.25rem 0.5rem;
+}
+
+.list-unstyled li {
+  font-size: 0.9rem;
+  color: var(--gray-dark);
+}

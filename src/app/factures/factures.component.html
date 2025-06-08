@@ -1,0 +1,61 @@
+<div class="container py-4">
+  <div class="card">
+    <div class="card-body">
+      <h2 class="text-primary mb-4">
+        <i class="fas fa-file-invoice me-2"></i>
+        {{ clientId ? "Factures du client" : "Toutes les factures" }}
+      </h2>
+
+      <!-- Message d'erreur -->
+      <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+      <!-- Loader -->
+      <div *ngIf="loading" class="text-center p-4">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Chargement...</span>
+        </div>
+      </div>
+
+      <!-- Liste des factures -->
+      <div *ngIf="!loading && !error" class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>N° Facture</th>
+              <th>Date</th>
+              <th>Client</th>
+              <th>Produits</th>
+              <th>Total</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let facture of factures">
+              <td>#{{ facture.id }}</td>
+              <td>{{ facture.dateEmission | date }}</td>
+              <td>{{ facture.client.name }}</td>
+              <td>
+                <ul class="list-unstyled mb-0">
+                  <li *ngFor="let ligne of facture.lignes">
+                    {{ ligne.produit.name }} ({{ ligne.quantite }}) -
+                    {{ ligne.montant | number : "1.2-2" }} €
+                  </li>
+                </ul>
+              </td>
+              <td>{{ calculateTotal(facture) | currency : "DT" }}</td>
+              <td>
+                <button
+                  class="btn btn-sm btn-primary"
+                  [routerLink]="['/reglements', facture.id]"
+                >
+                  <i class="fas fa-money-bill-wave me-1"></i>
+                  Règlements
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

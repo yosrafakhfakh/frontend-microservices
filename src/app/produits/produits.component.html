@@ -1,0 +1,55 @@
+<div class="container">
+  <div class="card mt-4">
+    <div class="card-body">
+      <h2 class="card-title text-primary-green">
+        <i class="fas fa-box me-2"></i>Gestion des Produits
+      </h2>
+      <button class="btn btn-primary mb-3">
+        <i class="fas fa-plus me-2"></i>Ajouter un produit
+      </button>
+
+      <!-- Message d'erreur -->
+      <div *ngIf="error" class="alert alert-danger">
+        {{ error }}
+      </div>
+
+      <!-- Loader -->
+      <div *ngIf="loading" class="text-center">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Chargement...</span>
+        </div>
+      </div>
+
+      <!-- Table des produits -->
+      <div *ngIf="!loading && !error" class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nom</th>
+              <th>Prix</th>
+              <th>Stock</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let produit of produits">
+              <td>{{ produit.id }}</td>
+              <td>{{ produit.name }}</td>
+              <td>{{ produit.price | currency : "EUR" }}</td>
+              <td>{{ produit.quantity }}</td>
+              <td>
+                <button class="btn btn-sm btn-info me-2">
+                  <i class="fas fa-edit"></i>
+                </button>
+                <button class="btn btn-sm btn-danger">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

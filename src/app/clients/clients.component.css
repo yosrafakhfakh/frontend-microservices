@@ -1,0 +1,73 @@
+.client-card {
+  transition: transform 0.2s;
+  border: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(145deg, #ffffff, #f8f9fa);
+}
+
+.client-card:hover {
+  transform: translateY(-5px);
+}
+
+.card-text {
+  color: var(--gray-dark);
+  font-size: 0.9rem;
+  line-height: 1.8;
+}
+
+.btn-primary {
+  width: 100%;
+  text-align: center;
+}
+
+.client-avatar {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background-color: var(--light);
+  color: var(--primary);
+}
+
+.search-box {
+  max-width: 300px;
+}
+
+.search-box .input-group {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  border-radius: var(--radius);
+}
+
+.search-box .form-control,
+.search-box .input-group-text {
+  border-color: #e2e8f0;
+}
+
+.search-box .form-control:focus {
+  box-shadow: none;
+  border-color: var(--accent);
+}
+
+.client-info {
+  padding: 1rem;
+  background-color: rgba(236, 240, 241, 0.3);
+  border-radius: var(--radius);
+  margin: 1rem -1rem;
+}
+
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.text-primary {
+  color: var(--primary) !important;
+}
+
+.text-muted {
+  color: var(--gray) !important;
+}

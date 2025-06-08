@@ -1,0 +1,50 @@
+<div class="container py-4">
+  <div class="card">
+    <div class="card-body">
+      <h2 class="text-primary mb-4">
+        <i class="fas fa-money-bill-wave me-2"></i>
+        Règlements de la facture #{{ factureId }}
+      </h2>
+
+      <!-- Message d'erreur -->
+      <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+      <!-- Loader -->
+      <div *ngIf="loading" class="text-center p-4">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Chargement...</span>
+        </div>
+      </div>
+
+      <!-- Liste des règlements -->
+      <div *ngIf="!loading && !error" class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>N° Règlement</th>
+              <th>Date</th>
+              <th>Mode</th>
+              <th>Montant</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let reglement of reglements">
+              <td>#{{ reglement.id }}</td>
+              <td>{{ reglement.dateReglement | date }}</td>
+              <td>{{ reglement.mode }}</td>
+              <td>{{ reglement.montant | currency : "DT" }}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Bouton pour ajouter un règlement -->
+        <div class="text-end mt-4">
+          <button class="btn btn-primary">
+            <i class="fas fa-plus me-2"></i>
+            Nouveau règlement
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
