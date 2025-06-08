@@ -3,7 +3,7 @@ import { AuthGuard } from './guards/auth.guard';
 import { RoleGuard } from './guards/role.guard';
 
 export const routes: Routes = [
-  { path: '', redirectTo: '/login', pathMatch: 'full' },
+  { path: '', redirectTo: '/accueil', pathMatch: 'full' },
   {
     path: 'login',
     loadComponent: () =>
@@ -12,7 +12,9 @@ export const routes: Routes = [
   {
     path: 'accueil',
     loadComponent: () =>
-      import('./accueil/accueil.component').then((m) => m.AccueilComponent),
+      import('./components/dashboard/dashboard.component').then(
+        (m) => m.DashboardComponent
+      ),
     canActivate: [AuthGuard],
   },
   {
@@ -25,28 +27,13 @@ export const routes: Routes = [
     path: 'produits',
     loadComponent: () =>
       import('./produits/produits.component').then((m) => m.ProduitsComponent),
+    canActivate: [AuthGuard],
   },
   {
     path: 'factures',
     loadComponent: () =>
       import('./factures/factures.component').then((m) => m.FacturesComponent),
-  },
-  {
-    path: 'factures/:clientId',
-    loadComponent: () =>
-      import('./factures/factures.component').then((m) => m.FacturesComponent),
-  },
-  {
-    path: 'clients/:clientId/factures',
-    loadComponent: () =>
-      import('./factures/factures.component').then((m) => m.FacturesComponent),
-  },
-  {
-    path: 'factures',
-    loadComponent: () =>
-      import('./factures/factures.component').then((m) => m.FacturesComponent),
-    canActivate: [AuthGuard, RoleGuard],
-    data: { role: 'ADMIN' },
+    canActivate: [AuthGuard],
   },
   {
     path: 'reglements',
@@ -57,25 +44,9 @@ export const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
-    path: 'mes-reglements',
-    loadComponent: () =>
-      import('./reglements/reglements.component').then(
-        (m) => m.ReglementsComponent
-      ),
-    canActivate: [AuthGuard],
-    data: { role: 'USER' },
-  },
-  {
-    path: 'reglements/:factureId',
-    loadComponent: () =>
-      import('./reglements/reglements.component').then(
-        (m) => m.ReglementsComponent
-      ),
-  },
-  {
     path: 'unauthorized',
     loadComponent: () =>
-      import('.//auth/unauthorized/unauthorized.component').then(
+      import('./auth/unauthorized/unauthorized.component').then(
         (m) => m.UnauthorizedComponent
       ),
   },
