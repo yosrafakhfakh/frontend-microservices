@@ -156,7 +156,7 @@ export class AuthService {
 
   getCurrentUserId(): number | null {
   const user = this.currentUserSubject.value;
-  return user?.userId || null;
+  return user && user.userId ? user.userId : null;
 }
 
   refreshToken() {
