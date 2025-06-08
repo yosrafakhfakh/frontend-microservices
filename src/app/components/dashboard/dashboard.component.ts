@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FactureService } from '../../services/facture.service';
 import { ClientService } from '../../services/client.service';
 import { ProduitService } from '../../services/produit.service';
+import { Chart } from 'chart.js/auto';
 
 @Component({
   selector: 'app-dashboard',
@@ -25,73 +26,101 @@ import { ProduitService } from '../../services/produit.service';
         </div>
       </div>
 
-      <!-- Cartes statistiques -->
-      <div class="stats-grid">
-        <div class="stat-card primary-card">
-          <div class="stat-card-content">
-            <div class="stat-card-info">
-              <h3 class="stat-card-value">
-                {{ stats.montantTotal | number : '1.0-0' }} €
-              </h3>
-              <p class="stat-card-label">Chiffre d'affaires</p>
-            </div>
-            <div class="stat-card-icon">
-              <i class="fas fa-chart-line"></i>
+      <!-- Section des statistiques de règlement -->
+      <div class="reglement-stats-section">
+        <div class="row">
+          <!-- Graphique circulaire -->
+          <div class="col-md-4">
+            <div class="chart-card">
+              <h3>État des règlements</h3>
+              <canvas id="reglementChart"></canvas>
             </div>
           </div>
-          <div class="stat-card-footer">
-            <span>Total des factures</span>
-          </div>
-        </div>
 
-        <div class="stat-card success-card">
-          <div class="stat-card-content">
-            <div class="stat-card-info">
-              <h3 class="stat-card-value">{{ stats.totalReglees }}</h3>
-              <p class="stat-card-label">Factures réglées</p>
-              <span class="stat-card-amount"
-                >{{ stats.montantRegle | number : '1.0-0' }} €</span
-              >
-            </div>
-            <div class="stat-card-icon">
-              <i class="fas fa-check-circle"></i>
-            </div>
-          </div>
-          <div class="stat-card-footer">
-            <span>Paiements reçus</span>
-          </div>
-        </div>
+          <!-- Statistiques détaillées -->
+          <div class="col-md-8">
+            <div class="stats-grid">
+              <div class="stat-card primary-card">
+                <div class="stat-card-content">
+                  <div class="stat-card-info">
+                    <h3 class="stat-card-value">
+                      {{ stats.totalFactures }}
+                    </h3>
+                    <p class="stat-card-label">Total des factures</p>
+                  </div>
+                  <div class="stat-card-icon">
+                    <i class="fas fa-file-invoice"></i>
+                  </div>
+                </div>
+                <div class="stat-card-footer">
+                  <span>Nombre total de factures</span>
+                </div>
+              </div>
 
-        <div class="stat-card warning-card">
-          <div class="stat-card-content">
-            <div class="stat-card-info">
-              <h3 class="stat-card-value">{{ stats.totalEnAttente }}</h3>
-              <p class="stat-card-label">En attente</p>
-              <span class="stat-card-amount"
-                >{{ stats.montantEnAttente | number : '1.0-0' }} €</span
-              >
-            </div>
-            <div class="stat-card-icon">
-              <i class="fas fa-clock"></i>
-            </div>
-          </div>
-          <div class="stat-card-footer">
-            <span>Paiements en attente</span>
-          </div>
-        </div>
+              <div class="stat-card success-card">
+                <div class="stat-card-content">
+                  <div class="stat-card-info">
+                    <h3 class="stat-card-value">{{ stats.totalReglees }}</h3>
+                    <p class="stat-card-label">Factures réglées</p>
+                    <span class="stat-card-amount"
+                      >{{
+                        (stats.totalReglees / stats.totalFactures) * 100
+                          | number : '1.0-0'
+                      }}%</span
+                    >
+                  </div>
+                  <div class="stat-card-icon">
+                    <i class="fas fa-check-circle"></i>
+                  </div>
+                </div>
+                <div class="stat-card-footer">
+                  <span>Paiements reçus</span>
+                </div>
+              </div>
 
-        <div class="stat-card danger-card">
-          <div class="stat-card-content">
-            <div class="stat-card-info">
-              <h3 class="stat-card-value">{{ stats.totalEnRetard }}</h3>
-              <p class="stat-card-label">En retard</p>
+              <div class="stat-card warning-card">
+                <div class="stat-card-content">
+                  <div class="stat-card-info">
+                    <h3 class="stat-card-value">{{ stats.totalNonReglees }}</h3>
+                    <p class="stat-card-label">Factures non réglées</p>
+                    <span class="stat-card-amount"
+                      >{{
+                        (stats.totalNonReglees / stats.totalFactures) * 100
+                          | number : '1.0-0'
+                      }}%</span
+                    >
+                  </div>
+                  <div class="stat-card-icon">
+                    <i class="fas fa-times-circle"></i>
+                  </div>
+                </div>
+                <div class="stat-card-footer">
+                  <span>En attente de paiement</span>
+                </div>
+              </div>
             </div>
-            <div class="stat-card-icon">
-              <i class="fas fa-exclamation-circle"></i>
+
+            <!-- Détails des montants -->
+            <div class="montants-details mt-4">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="montant-card">
+                    <h4>Montant total réglé</h4>
+                    <div class="montant-value success">
+                      {{ stats.montantRegle | number : '1.0-0' }} €
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="montant-card">
+                    <h4>Montant en attente</h4>
+                    <div class="montant-value warning">
+                      {{ stats.montantEnAttente | number : '1.0-0' }} €
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
-          <div class="stat-card-footer">
-            <span>Nécessite une action</span>
           </div>
         </div>
       </div>
@@ -343,74 +372,115 @@ import { ProduitService } from '../../services/produit.service';
         margin: 0;
       }
 
+      .reglement-stats-section {
+        background: white;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 30px;
+      }
+
+      .chart-card {
+        background: white;
+        border-radius: 8px;
+        padding: 20px;
+        height: 100%;
+        text-align: center;
+      }
+
       .stats-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 1.5rem;
-        margin-bottom: 2rem;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        margin-bottom: 20px;
       }
 
       .stat-card {
         background: white;
-        border-radius: 12px;
-        overflow: hidden;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-        transition: transform 0.2s, box-shadow 0.2s;
-      }
-
-      .stat-card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       }
 
       .stat-card-content {
-        padding: 1.5rem;
         display: flex;
         justify-content: space-between;
-        align-items: flex-start;
+        align-items: center;
+      }
+
+      .stat-card-info {
+        flex: 1;
       }
 
       .stat-card-value {
-        font-size: 2rem;
+        font-size: 24px;
         font-weight: 600;
-        margin-bottom: 0.5rem;
-        line-height: 1;
+        margin: 0;
+        color: #2c3e50;
       }
 
       .stat-card-label {
-        color: var(--gray-600);
-        margin-bottom: 0.5rem;
+        color: #6c757d;
+        margin: 5px 0;
       }
 
       .stat-card-amount {
-        font-size: 1.1rem;
+        font-size: 14px;
+        color: #28a745;
         font-weight: 500;
       }
 
       .stat-card-icon {
-        font-size: 2rem;
-        opacity: 0.8;
+        font-size: 24px;
+        margin-left: 15px;
       }
 
       .stat-card-footer {
-        padding: 1rem 1.5rem;
-        background: var(--gray-50);
-        border-top: 1px solid var(--gray-100);
-        color: var(--gray-600);
-        font-size: 0.875rem;
+        margin-top: 15px;
+        padding-top: 10px;
+        border-top: 1px solid #eee;
+        color: #6c757d;
+        font-size: 14px;
       }
 
-      .primary-card {
-        color: var(--primary);
+      .montants-details {
+        background: white;
+        border-radius: 8px;
+        padding: 20px;
       }
-      .success-card {
-        color: var(--success);
+
+      .montant-card {
+        text-align: center;
+        padding: 15px;
       }
-      .warning-card {
-        color: var(--warning);
+
+      .montant-card h4 {
+        color: #6c757d;
+        font-size: 16px;
+        margin-bottom: 10px;
       }
-      .danger-card {
-        color: var(--danger);
+
+      .montant-value {
+        font-size: 24px;
+        font-weight: 600;
+      }
+
+      .montant-value.success {
+        color: #28a745;
+      }
+
+      .montant-value.warning {
+        color: #ffc107;
+      }
+
+      .primary-card .stat-card-icon {
+        color: #007bff;
+      }
+      .success-card .stat-card-icon {
+        color: #28a745;
+      }
+      .warning-card .stat-card-icon {
+        color: #ffc107;
       }
 
       .factures-section {
@@ -632,6 +702,8 @@ export class DashboardComponent implements OnInit {
     montantTotal: 0,
     montantRegle: 0,
     montantEnAttente: 0,
+    totalFactures: 0,
+    totalNonReglees: 0,
   };
 
   topClients: any[] = [];
@@ -654,14 +726,48 @@ export class DashboardComponent implements OnInit {
   }
 
   private loadStatistiques() {
-    this.factureService.getStatistiques().subscribe(
-      (stats) => {
-        this.stats = stats;
+    this.factureService.getStatistiques().subscribe({
+      next: (data) => {
+        this.stats = {
+          ...data,
+          totalFactures:
+            data.totalReglees + data.totalEnAttente + data.totalEnRetard,
+          totalNonReglees: data.totalEnAttente + data.totalEnRetard,
+        };
+        this.initReglementChart();
       },
-      (error) => {
+      error: (error) => {
         console.error('Erreur lors du chargement des statistiques:', error);
-      }
-    );
+      },
+    });
+  }
+
+  private initReglementChart() {
+    const ctx = document.getElementById('reglementChart') as HTMLCanvasElement;
+    if (ctx) {
+      new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Réglées', 'Non réglées'],
+          datasets: [
+            {
+              data: [this.stats.totalReglees, this.stats.totalNonReglees],
+              backgroundColor: ['#28a745', '#ffc107'],
+              borderWidth: 0,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'bottom',
+            },
+          },
+        },
+      });
+    }
   }
 
   private loadTopClients() {
